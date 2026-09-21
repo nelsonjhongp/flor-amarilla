@@ -64,7 +64,10 @@
           </svg>
           <span class="bouquet-sheen" aria-hidden="true"></span>
         </span>
-        <span class="tap-hint" id="tapHint"><span aria-hidden="true">↟</span> Toca el ramo</span>
+        <span class="tap-hint" id="tapHint">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+          Toca el ramo
+        </span>
       </button>
 
       <article class="letter" id="letter" aria-labelledby="letterTitle" aria-hidden="true">
@@ -75,6 +78,11 @@
       </article>
     </section>
 
+    <audio id="backgroundMusic" loop preload="none"></audio>
+    <button class="music-button" id="musicButton" type="button" aria-label="Reproducir música" aria-pressed="false" title="Reproducir música">
+      <svg class="icon-play" id="playIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7Z"/></svg>
+      <svg class="icon-pause" id="pauseIcon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M9 5v14M15 5v14"/></svg>
+    </button>
     <button class="rain-button" id="rainButton" type="button" aria-label="Hacer llover girasoles" title="Otra pequeña lluvia" hidden>
       <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#f2bd3e"><ellipse rx="5" ry="12" transform="translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(45 24 24) translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(90 24 24) translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(135 24 24) translate(24 10)"/></g><circle cx="24" cy="24" r="8" fill="#65442a"/></svg>
     </button>

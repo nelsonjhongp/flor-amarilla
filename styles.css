@@ -36,7 +36,7 @@ button { font: inherit; } button, a { -webkit-tap-highlight-color: transparent; 
 .ribbon { fill: var(--coral); opacity: 0; transform-box: fill-box; transform-origin: center; animation: ribbonIn .6s cubic-bezier(.2,.85,.3,1.2) .9s forwards; }
 .bouquet-sheen { position: absolute; inset: 10% 18% 16%; border-radius: 50%; opacity: 0; background: radial-gradient(circle, rgba(255,244,190,.22), transparent 68%); transition: opacity 1s ease; pointer-events: none; }
 .tap-hint { position: absolute; left: 50%; bottom: 0; width: max-content; transform: translateX(-50%); padding: 7px 13px; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; background: rgba(245,250,249,.28); box-shadow: 0 6px 22px rgba(74,99,112,.09); backdrop-filter: blur(5px); color: rgba(52,75,88,.8); font-size: .75rem; letter-spacing: .03em; transition: opacity .45s ease, transform .45s ease; }
-.tap-hint span { display: inline-block; margin-right: 5px; animation: hint 1.9s ease-in-out infinite; }
+.tap-hint svg { display: inline-block; width: 15px; height: 15px; margin-right: 4px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; animation: hint 1.9s ease-in-out infinite; }
 .letter { position: absolute; z-index: 2; width: min(90vw, 440px); padding: clamp(28px,7vw,46px) clamp(24px,7vw,48px) 27px; border: 1px solid rgba(111,91,60,.12); border-radius: 3px; background: linear-gradient(rgba(100,80,50,.035) 1px, transparent 1px) 0 26px / 100% 27px, #fffaf0; box-shadow: 0 22px 55px rgba(66,86,95,.24), 0 2px 0 rgba(255,255,255,.8) inset; opacity: 0; transform: translateY(36px) rotate(1.5deg) scale(.94); pointer-events: none; transition: opacity .8s ease .42s, transform .95s cubic-bezier(.2,.8,.2,1) .35s; }
 .letter::after { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(217,142,122,.18); pointer-events: none; }
 .tape { position: absolute; top: -13px; left: 50%; width: 82px; height: 29px; transform: translateX(-50%) rotate(-2deg); background: rgba(224,193,145,.45); box-shadow: 0 1px 2px rgba(80,60,40,.08); }
@@ -48,8 +48,15 @@ button { font: inherit; } button, a { -webkit-tap-highlight-color: transparent; 
 .scene.is-open .bouquet-wrap { transform: scale(1.045); } .scene.is-open .bouquet-sheen { opacity: 1; }
 .scene.is-open .tap-hint { opacity: 0; transform: translate(-50%,8px); }
 .scene.is-open .letter { opacity: 1; transform: translate(27%,-4px) rotate(1.5deg); pointer-events: auto; }
-.rain-button { position: fixed; z-index: 10; right: max(16px, env(safe-area-inset-right)); bottom: max(17px, env(safe-area-inset-bottom)); width: 48px; height: 48px; padding: 9px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(255,250,240,.8); box-shadow: 0 9px 25px rgba(64,83,92,.18); cursor: pointer; opacity: 0; transform: translateY(18px) scale(.8); pointer-events: none; transition: opacity .5s ease 1.25s, transform .5s ease 1.25s, background .25s ease; }
-.rain-button:hover { background: #fffaf0; } .rain-button:focus-visible { outline: 3px solid #fffaf0; outline-offset: 3px; } .rain-button svg { display: block; width: 100%; height: 100%; }
+.rain-button, .music-button { position: fixed; z-index: 10; right: max(16px, env(safe-area-inset-right)); width: 48px; height: 48px; padding: 9px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; background: rgba(255,250,240,.82); color: #536b70; box-shadow: 0 9px 25px rgba(64,83,92,.18); backdrop-filter: blur(6px); cursor: pointer; transition: opacity .5s ease, transform .5s ease, background .25s ease; }
+.rain-button { bottom: max(17px, env(safe-area-inset-bottom)); opacity: 0; transform: translateY(18px) scale(.8); pointer-events: none; transition-delay: 1.25s; }
+.music-button { bottom: max(75px, calc(env(safe-area-inset-bottom) + 75px)); }
+.rain-button:hover, .music-button:hover, .music-button.is-playing { background: #fffaf0; }
+.rain-button:focus-visible, .music-button:focus-visible { outline: 3px solid #fffaf0; outline-offset: 3px; }
+.rain-button svg, .music-button svg { display: block; width: 100%; height: 100%; }
+.music-button svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.music-button .icon-play { fill: currentColor; stroke: none; }
+.music-button svg[hidden] { display: none; }
 .rain-button[hidden] { display: none; }
 .scene.is-open .rain-button { opacity: 1; transform: none; pointer-events: auto; }
 .falling-petal, .mini-flower, .sparkle { position: absolute; opacity: 0; will-change: transform; }
@@ -73,8 +80,8 @@ button { font: inherit; } button, a { -webkit-tap-highlight-color: transparent; 
 @keyframes sparkle { 0% { opacity: 0; transform: translate(0,0) scale(.2); } 30% { opacity: .85; } 100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0); } }
 @media (max-width: 700px) {
   .scene.is-open { display: block; padding-top: max(20px, env(safe-area-inset-top)); }
-  .scene.is-open .gift { min-height: 870px; display: block; padding-top: 215px; }
-  .scene.is-open .bouquet-button { position: absolute; top: -35px; left: 50%; width: min(70vw,300px); height: 400px; min-height: 0; transform: translateX(-50%) scale(.66) rotate(-3deg); transform-origin: center; }
+  .scene.is-open .gift { min-height: 920px; display: block; padding-top: 350px; }
+  .scene.is-open .bouquet-button { position: absolute; top: -65px; left: 50%; width: min(86vw,340px); height: 440px; min-height: 0; transform: translateX(-50%) scale(.78) rotate(-2deg); transform-origin: center; }
   .scene.is-open .letter { position: relative; width: min(92vw,430px); margin: 0 auto 80px; transform: rotate(1deg); }
 }
 @media (min-width: 701px) {

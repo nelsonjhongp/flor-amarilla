@@ -1,6 +1,10 @@
 const scene = document.querySelector('#scene');
 const bouquetButton = document.querySelector('#bouquetButton');
 const rainButton = document.querySelector('#rainButton');
+const musicButton = document.querySelector('#musicButton');
+const backgroundMusic = document.querySelector('#backgroundMusic');
+const playIcon = document.querySelector('#playIcon');
+const pauseIcon = document.querySelector('#pauseIcon');
 const letter = document.querySelector('#letter');
 const fallLayer = document.querySelector('#fallLayer');
 const sparkleLayer = document.querySelector('#sparkleLayer');
@@ -10,6 +14,9 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let opened = false;
 let rainTimer;
 const random = (min, max) => Math.random() * (max - min) + min;
+const musicMode = new URLSearchParams(window.location.search).get('m');
+
+backgroundMusic.src = musicMode === 'at' ? 'aphex-twin.ogg' : 'default.ogg';
 
 function removeAfterAnimation(element) {
   element.addEventListener('animationend', () => element.remove(), { once: true });
@@ -139,6 +146,26 @@ function openGift() {
 }
 
 bouquetButton.addEventListener('click', openGift);
+musicButton.addEventListener('click', async () => {
+  if (backgroundMusic.paused) {
+    try {
+      await backgroundMusic.play();
+    } catch {
+      status.textContent = 'No se pudo reproducir la música. Revisa el archivo de audio.';
+      return;
+    }
+  } else {
+    backgroundMusic.pause();
+  }
+
+  const isPlaying = !backgroundMusic.paused;
+  musicButton.classList.toggle('is-playing', isPlaying);
+  musicButton.setAttribute('aria-pressed', String(isPlaying));
+  musicButton.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
+  musicButton.title = isPlaying ? 'Pausar música' : 'Reproducir música';
+  playIcon.hidden = isPlaying;
+  pauseIcon.hidden = !isPlaying;
+});
 rainButton.addEventListener('click', () => {
   softRain();
   status.textContent = 'Comenzó otra lluvia suave de pétalos y girasoles.';
