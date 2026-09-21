@@ -1,87 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#11150f" />
-  <meta name="color-scheme" content="dark" />
-  <title>Una flor amarilla para ti</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#b9cedc">
+  <meta name="description" content="Un pequeño detalle por el Día de la Flor Amarilla.">
+  <title>Una flor amarilla para este 21 de septiembre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="scene" id="scene">
-    <div class="ambient" aria-hidden="true"></div>
-    <div class="particles" id="particles" aria-hidden="true"></div>
+    <div class="sky" aria-hidden="true">
+      <span class="cloud cloud-one"></span><span class="cloud cloud-two"></span><span class="cloud cloud-three"></span>
+      <span class="sun-wash"></span><span class="grain"></span>
+    </div>
 
-    <section class="card" aria-labelledby="main-title">
-      <p class="date">21 · 09 · 2026</p>
-      <p class="eyebrow" id="intro">Tengo algo para ti.</p>
+    <section class="gift" aria-label="Un detalle por el Día de la Flor Amarilla">
+      <button class="bouquet-button" id="bouquetButton" type="button" aria-describedby="tapHint" aria-expanded="false">
+        <span class="bouquet-wrap">
+          <svg class="bouquet" viewBox="0 0 430 560" role="img" aria-labelledby="bouquetTitle bouquetDesc">
+            <title id="bouquetTitle">Ramo de girasoles</title>
+            <desc id="bouquetDesc">Un ramo ilustrado de girasoles envuelto en papel crema y azul.</desc>
+            <defs>
+              <radialGradient id="petalPaint" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#ffe997"/><stop offset=".55" stop-color="#f5c84b"/><stop offset="1" stop-color="#d99a24"/></radialGradient>
+              <radialGradient id="diskPaint" cx="38%" cy="33%" r="70%"><stop offset="0" stop-color="#87602e"/><stop offset=".6" stop-color="#5f3e24"/><stop offset="1" stop-color="#3d2a20"/></radialGradient>
+              <linearGradient id="paperPaint" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fbf4dd"/><stop offset="1" stop-color="#d9e3df"/></linearGradient>
+              <filter id="paperShadow" x="-30%" y="-20%" width="160%" height="170%"><feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#526d7b" flood-opacity=".25"/></filter>
+              <g id="bloom">
+                <g class="petal-ring">
+                  <ellipse rx="18" ry="50" transform="translate(0 -43)"/><ellipse rx="18" ry="50" transform="rotate(45) translate(0 -43)"/>
+                  <ellipse rx="18" ry="50" transform="rotate(90) translate(0 -43)"/><ellipse rx="18" ry="50" transform="rotate(135) translate(0 -43)"/>
+                  <ellipse rx="18" ry="50" transform="rotate(180) translate(0 -43)"/><ellipse rx="18" ry="50" transform="rotate(225) translate(0 -43)"/>
+                  <ellipse rx="18" ry="50" transform="rotate(270) translate(0 -43)"/><ellipse rx="18" ry="50" transform="rotate(315) translate(0 -43)"/>
+                </g>
+                <circle class="disk" r="31"/><circle class="disk-detail" r="19"/>
+              </g>
+            </defs>
 
-      <button class="flower-button" id="flowerButton" type="button" aria-label="Hacer florecer la flor">
-        <svg class="flower" viewBox="0 0 320 420" role="img" aria-label="Flor amarilla animada">
-          <defs>
-            <radialGradient id="petalGradient" cx="50%" cy="42%" r="65%">
-              <stop offset="0%" stop-color="#fff4a7" />
-              <stop offset="54%" stop-color="#f8cf46" />
-              <stop offset="100%" stop-color="#e8a824" />
-            </radialGradient>
-            <radialGradient id="centerGradient" cx="40%" cy="35%" r="70%">
-              <stop offset="0%" stop-color="#7b5420" />
-              <stop offset="100%" stop-color="#3d2911" />
-            </radialGradient>
-            <linearGradient id="stemGradient" x1="0" x2="1">
-              <stop offset="0%" stop-color="#355a32" />
-              <stop offset="100%" stop-color="#6e8e49" />
-            </linearGradient>
-            <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="8" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <g class="stem-group">
-            <path class="stem" d="M159 385 C159 320, 160 245, 161 178" pathLength="1" />
-            <path class="leaf leaf-left" d="M154 296 C118 271, 91 276, 72 307 C107 315, 132 309, 154 296 Z" />
-            <path class="leaf leaf-right" d="M163 247 C196 220, 225 223, 247 250 C214 263, 188 259, 163 247 Z" />
-          </g>
-
-          <g class="bloom" transform="translate(160 151)">
-            <circle class="halo" r="82" />
-            <g class="petals">
-              <ellipse class="petal p1" rx="26" ry="66" transform="rotate(0) translate(0 -49)" />
-              <ellipse class="petal p2" rx="26" ry="66" transform="rotate(45) translate(0 -49)" />
-              <ellipse class="petal p3" rx="26" ry="66" transform="rotate(90) translate(0 -49)" />
-              <ellipse class="petal p4" rx="26" ry="66" transform="rotate(135) translate(0 -49)" />
-              <ellipse class="petal p5" rx="26" ry="66" transform="rotate(180) translate(0 -49)" />
-              <ellipse class="petal p6" rx="26" ry="66" transform="rotate(225) translate(0 -49)" />
-              <ellipse class="petal p7" rx="26" ry="66" transform="rotate(270) translate(0 -49)" />
-              <ellipse class="petal p8" rx="26" ry="66" transform="rotate(315) translate(0 -49)" />
+            <g class="stems" fill="none" stroke="#607c62" stroke-linecap="round">
+              <path d="M210 461 Q188 330 147 178"/><path d="M211 462 Q222 330 279 176"/><path d="M210 462 Q211 305 214 132"/><path d="M207 461 Q173 352 104 247"/><path d="M214 461 Q256 352 327 251"/>
             </g>
-            <circle class="flower-center" r="35" />
-            <g class="center-dots" aria-hidden="true">
-              <circle cx="-10" cy="-8" r="2.2"/><circle cx="5" cy="-12" r="2"/><circle cx="12" cy="3" r="2.4"/>
-              <circle cx="-5" cy="10" r="2"/><circle cx="-16" cy="6" r="1.7"/><circle cx="3" cy="4" r="1.6"/>
+            <g class="leaves" fill="#718c70">
+              <path d="M178 337 Q116 307 105 353 Q139 375 181 353Z"/><path d="M245 326 Q296 290 315 332 Q286 363 244 346Z"/>
+              <path d="M198 286 Q152 249 139 288 Q158 320 198 309Z"/><path d="M230 270 Q272 235 286 272 Q265 305 229 296Z"/>
             </g>
-          </g>
-        </svg>
-        <span class="tap-hint" id="tapHint">Toca para hacerla florecer</span>
+            <g class="flower flower-left" transform="translate(122 205) rotate(-16) scale(.84)"><use href="#bloom"/></g>
+            <g class="flower flower-right" transform="translate(301 205) rotate(15) scale(.82)"><use href="#bloom"/></g>
+            <g class="flower flower-low-left" transform="translate(83 277) rotate(-26) scale(.61)"><use href="#bloom"/></g>
+            <g class="flower flower-low-right" transform="translate(343 277) rotate(25) scale(.59)"><use href="#bloom"/></g>
+            <g class="flower flower-main" transform="translate(212 142) scale(1.08)"><use href="#bloom"/></g>
+
+            <g class="paper" filter="url(#paperShadow)">
+              <path d="M68 292 L210 515 L359 290 Q298 335 210 347 Q126 336 68 292Z" fill="url(#paperPaint)"/>
+              <path d="M68 292 Q123 319 210 347 L116 412Z" fill="#e9dcc8" opacity=".78"/>
+              <path d="M359 290 Q301 320 210 347 L304 414Z" fill="#c8d8d8" opacity=".8"/>
+              <path d="M116 412 L210 515 L304 414 L210 439Z" fill="#f4ecd8"/>
+              <path d="M93 322 Q112 376 116 412" fill="none" stroke="#fff9ea" stroke-width="3" opacity=".75"/>
+            </g>
+            <g class="ribbon"><path d="M211 427 Q169 395 153 431 Q175 451 209 441Z"/><path d="M211 427 Q253 396 270 431 Q249 451 213 441Z"/><path d="M205 439 L182 493 L216 460Z"/><path d="M217 439 L241 492 L211 460Z"/><circle cx="211" cy="436" r="11"/></g>
+          </svg>
+          <span class="bouquet-sheen" aria-hidden="true"></span>
+        </span>
+        <span class="tap-hint" id="tapHint"><span aria-hidden="true">↟</span> Toca el ramo</span>
       </button>
 
-      <div class="message" id="message" aria-live="polite">
-        <h1 id="main-title">Una flor amarilla para ti.</h1>
-        <p>No podía dártela de la forma habitual,<br />así que hice que una floreciera aquí para ti.</p>
-        <button class="again" id="againButton" type="button">Toca la flor una vez más</button>
-        <p class="signature" id="signature">— Nelson</p>
-      </div>
+      <article class="letter" id="letter" aria-labelledby="letterTitle" aria-hidden="true">
+        <span class="tape" aria-hidden="true"></span><span class="doodle" aria-hidden="true">✦</span>
+        <h1 id="letterTitle">Una flor amarilla para ti. <span class="flower-mark" aria-hidden="true">🌻</span></h1>
+        <p>Por este 21 de septiembre, hice que un pequeño ramo floreciera por aquí.</p>
+        <p>Nada demasiado complicado, solo un detalle bonito para alegrarte un poquito el día.</p>
+      </article>
     </section>
 
-    <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
+    <button class="rain-button" id="rainButton" type="button" aria-label="Hacer llover girasoles" title="Otra pequeña lluvia" hidden>
+      <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="#f2bd3e"><ellipse rx="5" ry="12" transform="translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(45 24 24) translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(90 24 24) translate(24 10)"/><ellipse rx="5" ry="12" transform="rotate(135 24 24) translate(24 10)"/></g><circle cx="24" cy="24" r="8" fill="#65442a"/></svg>
+    </button>
+    <div class="fall-layer" id="fallLayer" aria-hidden="true"></div>
     <div class="sparkle-layer" id="sparkleLayer" aria-hidden="true"></div>
+    <p class="sr-only" id="status" aria-live="polite"></p>
   </main>
-
   <script src="script.js"></script>
 </body>
 </html>

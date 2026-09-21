@@ -1,104 +1,155 @@
-const scene = document.getElementById('scene');
-const flowerButton = document.getElementById('flowerButton');
-const againButton = document.getElementById('againButton');
-const petalLayer = document.getElementById('petalLayer');
-const sparkleLayer = document.getElementById('sparkleLayer');
-const particles = document.getElementById('particles');
+const scene = document.querySelector('#scene');
+const bouquetButton = document.querySelector('#bouquetButton');
+const rainButton = document.querySelector('#rainButton');
+const letter = document.querySelector('#letter');
+const fallLayer = document.querySelector('#fallLayer');
+const sparkleLayer = document.querySelector('#sparkleLayer');
+const status = document.querySelector('#status');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-let bloomed = false;
-let finalShown = false;
+let opened = false;
+let rainTimer;
+const random = (min, max) => Math.random() * (max - min) + min;
 
-const rand = (min, max) => Math.random() * (max - min) + min;
-
-function flowerCenter() {
-  const rect = flowerButton.getBoundingClientRect();
-  return {
-    x: rect.left + rect.width * 0.5,
-    y: rect.top + rect.height * 0.36,
-  };
+function removeAfterAnimation(element) {
+  element.addEventListener('animationend', () => element.remove(), { once: true });
 }
 
-function makeAmbientDots() {
-  for (let i = 0; i < 18; i++) {
-    const dot = document.createElement('span');
-    dot.className = 'float-dot';
-    dot.style.left = `${rand(3, 97)}%`;
-    dot.style.top = `${rand(8, 92)}%`;
-    dot.style.setProperty('--duration', `${rand(3.8, 7.5)}s`);
-    dot.style.animationDelay = `${rand(-6, 0)}s`;
-    dot.style.transform = `scale(${rand(.6, 1.35)})`;
-    particles.appendChild(dot);
+function makePetal({ fromBouquet = false } = {}) {
+  const petal = document.createElement('span');
+  petal.className = 'falling-petal';
+  petal.style.left = fromBouquet ? `${random(40, 60)}%` : `${random(3, 97)}%`;
+  petal.style.top = fromBouquet ? `${random(30, 47)}%` : '-24px';
+  petal.style.setProperty('--size', `${random(6, 12)}px`);
+  petal.style.setProperty('--duration', `${random(5.5, 9.5)}s`);
+  petal.style.setProperty('--delay', `${random(0, fromBouquet ? .35 : 2.7)}s`);
+  petal.style.setProperty('--drift', `${random(-90, 90)}px`);
+  petal.style.setProperty('--start', `${random(-90, 90)}deg`);
+  petal.style.setProperty('--end', `${random(280, 760)}deg`);
+  fallLayer.appendChild(petal);
+  removeAfterAnimation(petal);
+}
+
+function burstPetals(x, y, count = 6) {
+  for (let index = 0; index < count; index += 1) {
+    const petal = document.createElement('span');
+    petal.className = 'falling-petal';
+    petal.style.left = `${x + random(-10, 10)}px`;
+    petal.style.top = `${y + random(-10, 10)}px`;
+    petal.style.setProperty('--size', `${random(6, 10)}px`);
+    petal.style.setProperty('--duration', `${random(2.5, 4.2)}s`);
+    petal.style.setProperty('--delay', `${random(0, .2)}s`);
+    petal.style.setProperty('--drift', `${random(-85, 85)}px`);
+    petal.style.setProperty('--start', `${random(-90, 90)}deg`);
+    petal.style.setProperty('--end', `${random(200, 600)}deg`);
+    fallLayer.appendChild(petal);
+    removeAfterAnimation(petal);
   }
 }
 
-function releasePetals(count = 7, energetic = false) {
-  const { x, y } = flowerCenter();
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('span');
-    p.className = 'falling-petal';
-    const size = rand(8, energetic ? 17 : 14);
-    const spread = energetic ? rand(-110, 110) : rand(-60, 60);
-    p.style.left = `${x + spread}px`;
-    p.style.top = `${y + rand(-20, 20)}px`;
-    p.style.setProperty('--size', `${size}px`);
-    p.style.setProperty('--duration', `${rand(2.5, energetic ? 4.2 : 5.2)}s`);
-    p.style.setProperty('--drift', `${rand(-85, 85)}px`);
-    p.style.setProperty('--fall', `${rand(150, energetic ? 330 : 250)}px`);
-    p.style.setProperty('--start-rot', `${rand(-100, 100)}deg`);
-    p.style.setProperty('--end-rot', `${rand(180, 680)}deg`);
-    p.style.animationDelay = `${rand(0, .45)}s`;
-    petalLayer.appendChild(p);
-    p.addEventListener('animationend', () => p.remove());
+function makeMiniFlower() {
+  const flower = document.createElement('span');
+  flower.className = 'mini-flower';
+  flower.style.left = `${random(5, 95)}%`;
+  flower.style.top = '-35px';
+  flower.style.setProperty('--size', `${random(20, 31)}px`);
+  flower.style.setProperty('--duration', `${random(8, 12)}s`);
+  flower.style.setProperty('--delay', `${random(.4, 3)}s`);
+  flower.style.setProperty('--drift', `${random(-65, 65)}px`);
+  flower.style.setProperty('--end', `${random(220, 520)}deg`);
+  flower.addEventListener('pointerdown', (event) => {
+    event.stopPropagation();
+    const rect = flower.getBoundingClientRect();
+    flower.remove();
+    burstPetals(rect.left + rect.width / 2, rect.top + rect.height / 2, 7);
+  }, { once: true });
+  fallLayer.appendChild(flower);
+  removeAfterAnimation(flower);
+}
+
+function makeSparkles(count = 9) {
+  const rect = bouquetButton.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height * .35;
+  for (let index = 0; index < count; index += 1) {
+    const sparkle = document.createElement('span');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = `${x + random(-50, 50)}px`;
+    sparkle.style.top = `${y + random(-45, 45)}px`;
+    sparkle.style.setProperty('--size', `${random(2, 4.5)}px`);
+    sparkle.style.setProperty('--dx', `${random(-70, 70)}px`);
+    sparkle.style.setProperty('--dy', `${random(-65, 55)}px`);
+    sparkleLayer.appendChild(sparkle);
+    removeAfterAnimation(sparkle);
   }
 }
 
-function sparkles(count = 12) {
-  const { x, y } = flowerCenter();
-  for (let i = 0; i < count; i++) {
-    const s = document.createElement('span');
-    s.className = 'sparkle';
-    s.style.left = `${x + rand(-20, 20)}px`;
-    s.style.top = `${y + rand(-15, 15)}px`;
-    s.style.setProperty('--size', `${rand(2.5, 5)}px`);
-    s.style.setProperty('--duration', `${rand(.7, 1.35)}s`);
-    s.style.setProperty('--dx', `${rand(-95, 95)}px`);
-    s.style.setProperty('--dy', `${rand(-95, 55)}px`);
-    s.style.animationDelay = `${rand(0, .18)}s`;
-    sparkleLayer.appendChild(s);
-    s.addEventListener('animationend', () => s.remove());
-  }
+function softRain() {
+  if (reducedMotion.matches) return;
+  window.clearInterval(rainTimer);
+  let released = 0;
+  rainTimer = window.setInterval(() => {
+    makePetal();
+    if (released % 5 === 0) makeMiniFlower();
+    released += 1;
+    if (released >= 28) window.clearInterval(rainTimer);
+  }, 170);
 }
 
-function bloom() {
-  if (bloomed) return;
-  bloomed = true;
-  scene.classList.add('is-bloomed');
-  flowerButton.setAttribute('aria-label', 'Flor amarilla florecida');
+function animateBouquetMove(startRect) {
+  if (reducedMotion.matches || typeof bouquetButton.animate !== 'function') return;
+  const bouquetWrap = bouquetButton.querySelector('.bouquet-wrap');
+  const endRect = bouquetButton.getBoundingClientRect();
+  const parentScale = endRect.width / bouquetButton.offsetWidth || 1;
+  const deltaX = (startRect.left + startRect.width / 2 - endRect.left - endRect.width / 2) / parentScale;
+  const deltaY = (startRect.top + startRect.height / 2 - endRect.top - endRect.height / 2) / parentScale;
+  const scaleX = startRect.width / endRect.width;
+  const scaleY = startRect.height / endRect.height;
 
-  window.setTimeout(() => sparkles(14), 820);
-  window.setTimeout(() => releasePetals(6, false), 1080);
-
-  if ('vibrate' in navigator) navigator.vibrate?.(18);
+  bouquetWrap.animate([
+    { transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})` },
+    { transform: 'scale(1.045)' },
+  ], {
+    duration: 1050,
+    easing: 'cubic-bezier(.2,.78,.2,1)',
+    fill: 'both',
+  });
 }
 
-function finalMoment() {
-  if (!bloomed) {
-    bloom();
+function openGift() {
+  if (opened) {
+    for (let index = 0; index < 4; index += 1) makePetal({ fromBouquet: true });
     return;
   }
-  if (finalShown) {
-    releasePetals(8, true);
-    sparkles(8);
-    return;
-  }
-  finalShown = true;
-  scene.classList.add('is-final');
-  releasePetals(12, true);
-  sparkles(20);
-  if ('vibrate' in navigator) navigator.vibrate?.([14, 30, 14]);
+  opened = true;
+  const bouquetWrap = bouquetButton.querySelector('.bouquet-wrap');
+  bouquetWrap.style.transform = '';
+  const startRect = bouquetButton.getBoundingClientRect();
+  scene.classList.add('is-open');
+  animateBouquetMove(startRect);
+  bouquetButton.setAttribute('aria-expanded', 'true');
+  bouquetButton.setAttribute('aria-label', 'Ramo de girasoles abierto; tocar para soltar pétalos');
+  letter.setAttribute('aria-hidden', 'false');
+  rainButton.hidden = false;
+  status.textContent = 'El ramo floreció y apareció una pequeña carta.';
+  makeSparkles(11);
+  for (let index = 0; index < 7; index += 1) makePetal({ fromBouquet: true });
+  window.setTimeout(softRain, 450);
+  navigator.vibrate?.(18);
 }
 
-flowerButton.addEventListener('click', () => bloomed ? finalMoment() : bloom());
-againButton.addEventListener('click', finalMoment);
+bouquetButton.addEventListener('click', openGift);
+rainButton.addEventListener('click', () => {
+  softRain();
+  status.textContent = 'Comenzó otra lluvia suave de pétalos y girasoles.';
+});
 
-makeAmbientDots();
+scene.addEventListener('pointermove', (event) => {
+  if (reducedMotion.matches || event.pointerType === 'touch' || opened) return;
+  const x = (event.clientX / window.innerWidth - .5) * 8;
+  const y = (event.clientY / window.innerHeight - .5) * 5;
+  bouquetButton.querySelector('.bouquet-wrap').style.transform = `translate(${x}px, ${y}px)`;
+});
+scene.addEventListener('pointerleave', () => {
+  if (!opened) bouquetButton.querySelector('.bouquet-wrap').style.transform = '';
+});
