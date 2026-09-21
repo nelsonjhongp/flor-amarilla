@@ -103,6 +103,25 @@ function softRain() {
   }, 170);
 }
 
+function syncMusicButton() {
+  const isPlaying = !backgroundMusic.paused;
+  musicButton.classList.toggle('is-playing', isPlaying);
+  musicButton.setAttribute('aria-pressed', String(isPlaying));
+  musicButton.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
+  musicButton.title = isPlaying ? 'Pausar música' : 'Reproducir música';
+  playIcon.hidden = isPlaying;
+  pauseIcon.hidden = !isPlaying;
+}
+
+async function startMusic() {
+  try {
+    await backgroundMusic.play();
+    syncMusicButton();
+  } catch {
+    // Los navegadores móviles suelen exigir una primera interacción del usuario.
+  }
+}
+
 function animateBouquetMove(startRect) {
   if (reducedMotion.matches || typeof bouquetButton.animate !== 'function') return;
   const bouquetWrap = bouquetButton.querySelector('.bouquet-wrap');
@@ -137,7 +156,9 @@ function openGift() {
   bouquetButton.setAttribute('aria-expanded', 'true');
   bouquetButton.setAttribute('aria-label', 'Ramo de girasoles abierto; tocar para soltar pétalos');
   letter.setAttribute('aria-hidden', 'false');
+  musicButton.hidden = false;
   rainButton.hidden = false;
+  void startMusic();
   status.textContent = 'El ramo floreció y apareció una pequeña carta.';
   makeSparkles(11);
   for (let index = 0; index < 7; index += 1) makePetal({ fromBouquet: true });
@@ -148,23 +169,11 @@ function openGift() {
 bouquetButton.addEventListener('click', openGift);
 musicButton.addEventListener('click', async () => {
   if (backgroundMusic.paused) {
-    try {
-      await backgroundMusic.play();
-    } catch {
-      status.textContent = 'No se pudo reproducir la música. Revisa el archivo de audio.';
-      return;
-    }
+    await startMusic();
   } else {
     backgroundMusic.pause();
+    syncMusicButton();
   }
-
-  const isPlaying = !backgroundMusic.paused;
-  musicButton.classList.toggle('is-playing', isPlaying);
-  musicButton.setAttribute('aria-pressed', String(isPlaying));
-  musicButton.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
-  musicButton.title = isPlaying ? 'Pausar música' : 'Reproducir música';
-  playIcon.hidden = isPlaying;
-  pauseIcon.hidden = !isPlaying;
 });
 rainButton.addEventListener('click', () => {
   softRain();
@@ -180,3 +189,5 @@ scene.addEventListener('pointermove', (event) => {
 scene.addEventListener('pointerleave', () => {
   if (!opened) bouquetButton.querySelector('.bouquet-wrap').style.transform = '';
 });
+
+void startMusic();
